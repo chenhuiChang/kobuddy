@@ -24,7 +24,7 @@ import pytz
 
 from .common import get_logger, unwrap, cproperty, group_by_key, the, nullcontext, Res, sorted_res, split_res
 from .kobo_device import get_kobo_mountpoint
-
+from pathlib import Path
 
 
 
@@ -37,10 +37,7 @@ DATABASES: List[Path] = []
 
 def set_databases(dbp: Optional[Union[Path, str]], label='KOBOeReader'):
     if dbp is None:
-        mount = get_kobo_mountpoint(label=label)
-        if mount is None:
-            raise RuntimeError(f"Coulnd't find mounted Kobo device with label '{label}', are you sure it's connected? (perhaps try using different label?)")
-        db = mount / '.kobo' / 'KoboReader.sqlite'
+        db = str(Path.home()) + '/Library/Application Support/Kobo/Kobo Desktop Edition/Kobo.sqlite'
         @contextmanager
         def tmp_db():
             # hacky way to use tmp file for database..
